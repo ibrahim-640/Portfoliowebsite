@@ -1,4 +1,4 @@
-# 🎯 Musab Wali - Portfolio Website
+# 🎯 Ibrahim Mutisia - PortfolioWebsite
 
 A modern, responsive portfolio website built with pure HTML, CSS, and JavaScript.
 
@@ -17,10 +17,10 @@ A modern, responsive portfolio website built with pure HTML, CSS, and JavaScript
 - **Animation:** Typed.js
 
 ## 🚀 Live Demo
-[View Live Website](https://your-username.github.io/musab-wali-portfolio/)
+[View Live Website](https://your-username.github.io/portfolio-website/)
 
 ## 📞 Connect With Me
-- Email: musab.wali@example.com
+- Email: mwitaibrahim88@gmail.com
 - GitHub: [@your-username](https://github.com/your-username)
 
 ---
