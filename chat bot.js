@@ -1,75 +1,164 @@
-    // ===== CHAT BOT LOGIC =====
-    (function() {
-      const chatToggle = document.getElementById('chatToggle');
-      const chatWidget = document.getElementById('chatWidget');
-      const chatClose = document.getElementById('chatClose');
-      const chatMessages = document.getElementById('chatMessages');
-      const chatInput = document.getElementById('chatInput');
-      const chatSend = document.getElementById('chatSend');
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
-      // ---- Open / Close ----
-      chatToggle.addEventListener('click', () => {
+    const chatToggle   = document.getElementById('chatToggle');
+    const chatWidget   = document.getElementById('chatWidget');
+    const chatClose    = document.getElementById('chatClose');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput    = document.getElementById('chatInput');
+    const chatSend     = document.getElementById('chatSend');
+
+    if (!chatToggle) return;
+
+    /* ---- Open / Close ---- */
+    chatToggle.addEventListener('click', () => {
         chatWidget.classList.toggle('open');
-      });
+    });
 
-      chatClose.addEventListener('click', () => {
+    chatClose.addEventListener('click', () => {
         chatWidget.classList.remove('open');
-      });
+    });
 
-      // ---- Bot Knowledge Base ----
-      const botKnowledge = [
-        { keywords: ['service', 'services', 'offer', 'do you do'], reply: "I offer Web Design, Front-End Development, Graphic Design, and Responsive UI. Each is tailored to your needs." },
-        { keywords: ['price', 'pricing', 'cost', 'how much', 'rates'], reply: "Pricing: Web Design from $300, Front-End Dev from $500, Graphic Design from $150, Responsive UI from $250. Contact me for a custom quote!" },
-        { keywords: ['project', 'projects', 'portfolio', 'work'], reply: "I've built Luxury Nest Hotel, Wolf Vanguard Tyres, The Grand Horizon, NexoraDigital, Safe Driving Academy, Verizon, Nexa, and a Weather App. Check the Projects section!" },
-        { keywords: ['guide', 'help', 'advice', 'recommend'], reply: "I can guide you: For a business site, start with Web Design + Responsive UI. For a web app, go with Front-End Dev. Let me know what you need!" },
-        { keywords: ['front-end', 'frontend', 'developer', 'react'], reply: "I specialize in modern front-end: HTML5, CSS3, JavaScript, React, and responsive frameworks. I build fast, interactive UIs." },
-        { keywords: ['graphic', 'logo', 'brand', 'design'], reply: "Graphic Design: logos, banners, social media kits, brand identity. Starting at $150. I'll create a visual identity that stands out." },
-        { keywords: ['responsive', 'mobile', 'ui', 'ux'], reply: "Responsive UI: mobile-first, cross-browser, pixel-perfect. Starting at $250. I ensure your site looks great on any device." },
-        { keywords: ['hello', 'hi', 'hey'], reply: "Hello! I'm Musab's assistant. Ask me about services, pricing, projects, or any guidance." },
-        { keywords: ['thank', 'thanks'], reply: "You're welcome! If you need more details, just ask. 😊" }
-      ];
+    /* ══════════════════════════════════
+       QUICK REPLY CHIPS
+    ══════════════════════════════════ */
+    function showQuickReplies() {
+        const chips = [
+            "What services do you offer?",
+            "What is your tech stack?",
+            "Show me your projects",
+            "How much do you charge?",
+            "How do I hire you?",
+            "Tell me about yourself"
+        ];
 
-      function getBotReply(userMsg) {
-        const lower = userMsg.toLowerCase().trim();
-        if (!lower) return "Please type something!";
-        for (let entry of botKnowledge) {
-          for (let kw of entry.keywords) {
-            if (lower.includes(kw)) return entry.reply;
-          }
+        const outer = document.createElement("div");
+        outer.className = "quick-replies-wrapper";
+        outer.id = "quick-replies";
+
+        const label = document.createElement("p");
+        label.className = "quick-replies-label";
+        label.textContent = "Suggested questions:";
+        outer.appendChild(label);
+
+        const wrap = document.createElement("div");
+        wrap.className = "quick-replies";
+
+        chips.forEach(chip => {
+            const chipBtn = document.createElement("button");
+            chipBtn.className = "quick-reply-btn";
+            chipBtn.textContent = chip;
+            chipBtn.onclick = () => {
+                chatInput.value = chip;
+                outer.remove();
+                handleSend();
+            };
+            wrap.appendChild(chipBtn);
+        });
+
+        outer.appendChild(wrap);
+        chatMessages.appendChild(outer);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    /* ══════════════════════════════════
+       TYPING INDICATOR
+    ══════════════════════════════════ */
+    function showTyping() {
+        const el = document.createElement("div");
+        el.className = "msg msg-bot typing-indicator";
+        el.id = "typing";
+        el.innerHTML = "<span></span><span></span><span></span>";
+        chatMessages.appendChild(el);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function hideTyping() {
+        const el = document.getElementById("typing");
+        if (el) el.remove();
+    }
+
+    /* ══════════════════════════════════
+       KNOWLEDGE BASE
+    ══════════════════════════════════ */
+    function getBotReply(userMsg) {
+        const t = userMsg.toLowerCase().trim();
+        if (!t) return "Please type something!";
+
+        if (t.includes("hi") || t.includes("hello") || t.includes("hey")) {
+            return "Hey there! 👋 I'm your portfolio assistant. Ask me about my services, tech stack, projects, pricing, or how to get in touch.";
         }
-        return "I'm here to help! Try asking about services, pricing, projects, or guidance. Or tell me more about what you're looking for.";
-      }
 
-      // ---- Add message ----
-      function addMessage(text, sender) {
+        if (t.includes("service") || t.includes("offer") || t.includes("do you do")) {
+            return "I offer three core services: 🌐 Web Development (Django, Python, HTML/CSS/Bootstrap), 📱 Mobile App Development (Android — Kotlin/Java, Firebase), and 🤖 AI-Integrated Apps (chatbots, smart features, AI APIs).";
+        }
+
+        if (t.includes("skill") || t.includes("stack") || t.includes("technology") || t.includes("tech")) {
+            return "My stack: 🐍 Python/Django, 📱 Kotlin/Java (Android), 🔥 Firebase, 🤖 AI integration, 🎨 HTML/CSS/Bootstrap.";
+        }
+
+        if (t.includes("project") || t.includes("portfolio") || t.includes("work") || t.includes("built") || t.includes("show")) {
+            return "I've built [list your project names here — web apps, Android apps, AI features]. Check the Projects section for details!";
+        }
+
+        if (t.includes("price") || t.includes("cost") || t.includes("charge") || t.includes("rate") || t.includes("fee") || t.includes("how much")) {
+            return "Pricing depends on project scope. Share your project details and I'll get back to you with a custom quote within 24 hours.";
+        }
+
+        if (t.includes("hire") || t.includes("contact") || t.includes("reach") || t.includes("email") || t.includes("message")) {
+            return "You can reach me directly through the contact page — I typically respond within 24 hours.";
+        }
+
+        if (t.includes("about") || t.includes("who") || t.includes("background") || t.includes("experience") || t.includes("education")) {
+            return "I'm a Full-Stack Developer & Android Engineer specializing in web, mobile, and AI-powered apps. [Add your background/education here.]";
+        }
+
+        if (t.includes("thank")) {
+            return "You're welcome! If you need more details, just ask. 😊";
+        }
+
+        return "I'm here to help! Try asking about my services, tech stack, projects, pricing, or how to hire me.";
+    }
+
+    /* ---- Add message ---- */
+    function addMessage(text, sender) {
+        hideTyping();
         const div = document.createElement('div');
         div.classList.add('msg', sender === 'bot' ? 'msg-bot' : 'msg-user');
         div.textContent = text;
         chatMessages.appendChild(div);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
+    }
 
-      // ---- Send handler ----
-      function handleSend() {
+    /* ---- Send handler ---- */
+    function handleSend() {
         const text = chatInput.value.trim();
         if (!text) return;
+
         addMessage(text, 'user');
         chatInput.value = '';
         chatInput.focus();
+
+        const qr = document.getElementById("quick-replies");
+        if (qr) qr.remove();
+
+        showTyping();
+
         setTimeout(() => {
-          addMessage(getBotReply(text), 'bot');
-        }, 350 + Math.random() * 300);
-      }
+            addMessage(getBotReply(text), 'bot');
+        }, 500 + Math.random() * 300);
+    }
 
-      // ---- Event listeners ----
-      chatSend.addEventListener('click', handleSend);
-      chatInput.addEventListener('keydown', (e) => {
+    /* ---- Event listeners ---- */
+    chatSend.addEventListener('click', handleSend);
+    chatInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-          e.preventDefault();
-          handleSend();
+            e.preventDefault();
+            handleSend();
         }
-      });
+    });
 
-      // Focus input on load
-      window.addEventListener('load', () => chatInput.focus());
-    })();
+    /* ---- Show chips on load ---- */
+    showQuickReplies();
+});
+</script>
