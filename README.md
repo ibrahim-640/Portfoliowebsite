@@ -11,7 +11,7 @@ A modern, responsive portfolio website built with pure HTML, CSS, and JavaScript
 - 🖼️ Project Gallery with Hover Effects
 
 ## 🛠️ Technologies Used
-- **Frontend:** HTML5, CSS3, JavaScript
+- **Frontend:** HTML5, CSS3,Tailwind,JavaScript
 - **Icons:** Font Awesome
 - **Fonts:** Google Fonts (Poppins)
 - **Animation:** Typed.js
