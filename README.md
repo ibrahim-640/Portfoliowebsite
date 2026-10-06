@@ -17,11 +17,11 @@ A modern, responsive portfolio website built with pure HTML, CSS, and JavaScript
 - **Animation:** Typed.js
 
 ## 🚀 Live Demo
-[View Live Website](https://your-username.github.io/portfolio-website/)
+[View Live Website](https://ibrahim-640.github.io/Portfoliowebsite/)
 
 ## 📞 Connect With Me
 - Email: mwitaibrahim88@gmail.com
-- GitHub: [@your-username](https://github.com/your-username)
+- GitHub: (https://github.com/ibrahim-640)
 
 ---
 
